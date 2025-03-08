@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM mysql:8.0
 
 COPY .infra/docker/mysql /docker-entrypoint-initdb.d/
 RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/

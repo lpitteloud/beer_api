@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Beer;
@@ -16,28 +18,42 @@ class BeerRepository extends ServiceEntityRepository
         parent::__construct($registry, Beer::class);
     }
 
-//    /**
-//     * @return Beer[] Returns an array of Beer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findHighestRatedBeers(int $limit): array
+    {
+        return $this->createQueryBuilder('beer')
+            ->orderBy('beer.rating', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Beer
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findMostBitterBeers(int $limit): array
+    {
+        return $this->createQueryBuilder('beer')
+            ->where('beer.ibu IS NOT NULL')
+            ->orderBy('beer.ibu', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findStylesByBeerCount(): array
+    {
+        return $this->createQueryBuilder('beer')
+            ->select('beer.style as style, COUNT(beer.id) as count')
+            ->groupBy('beer.style')
+            ->orderBy('count', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBeersByAlcoholContent(int $limit): array
+    {
+        return $this->createQueryBuilder('beer')
+            ->where('beer.abv IS NOT NULL')
+            ->orderBy('beer.abv', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

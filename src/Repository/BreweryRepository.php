@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Brewery;
@@ -16,28 +18,17 @@ class BreweryRepository extends ServiceEntityRepository
         parent::__construct($registry, Brewery::class);
     }
 
-    //    /**
-    //     * @return Brewery[] Returns an array of Brewery objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Brewery
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * @return Brewery[]
+     */
+    public function findCountriesByBreweryCount(int $limit): array
+    {
+        return $this->createQueryBuilder('brewery')
+            ->select('brewery.country as country, COUNT(brewery.id) as count')
+            ->groupBy('brewery.country')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

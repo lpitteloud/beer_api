@@ -9,4 +9,9 @@ use App\Entity\Brewery;
 interface BreweryProviderInterface
 {
     public function findByExternalId(string $externalId): ?Brewery;
+
+    /**
+     * @return Brewery[]
+     */
+    public function findCountriesByBreweryCount(int $limit): array;
 }

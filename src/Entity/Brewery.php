@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\BreweryStatsController;
 use App\Repository\BreweryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +18,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BreweryRepository::class)]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Get(),
+    new Post(),
+    new Patch(),
+    new Delete(),
+    new GetCollection(),
+    new GetCollection(
+        uriTemplate: '/rankings/countries/by-brewery-count',
+        controller: BreweryStatsController::class . '::getCountriesByBreweryCount',
+    )
+])]
 class Brewery
 {
     #[ORM\Id]

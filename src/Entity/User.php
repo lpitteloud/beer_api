@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\Timestampable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -20,20 +24,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $username = null;
+    public function __construct(
+        #[ORM\Column(length: 180)]
+        private ?string $username = null,
 
-    /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
-    private array $roles = [];
+        /**
+         * @var list<string> The user roles
+         */
+        #[ORM\Column]
+        private array $roles = [],
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
+        /**
+         * @var string The hashed password
+         */
+        #[ORM\Column]
+        private ?string $password = null,
+
+        /**
+         * @var Collection<int, Checkin>
+         */
+        #[ORM\OneToMany(targetEntity: Checkin::class, mappedBy: 'user', orphanRemoval: true)]
+        private Collection $checkins = new ArrayCollection()
+    ) {
+    }
 
     public function getId(): ?int
     {
@@ -108,5 +121,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Checkin>
+     */
+    public function getCheckins(): Collection
+    {
+        return $this->checkins;
+    }
+
+    public function addCheckin(Checkin $checkin): static
+    {
+        if (!$this->checkins->contains($checkin)) {
+            $this->checkins->add($checkin);
+            $checkin->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheckin(Checkin $checkin): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->checkins->removeElement($checkin) && $checkin->getUser() === $this) {
+            $checkin->setUser(null);
+        }
+
+        return $this;
     }
 }

@@ -21,15 +21,10 @@ readonly class BreweryDataMapper implements BreweryDataMapperInterface
         $breweryId = $data['brewery_id'] ?? null;
         $brewery = $this->breweryProvider->findByExternalId($breweryId);
 
-        if ($brewery === null) {
-            $brewery = $this->breweryDenormalizer->denormalize($data);
+        if ($brewery !== null) {
+            return $brewery;
         }
 
-        $brewery->setName($data['Brewer'] ?? '');
-        $brewery->setStreetAddress($data['Address'] ?? '');
-        $brewery->setCity($data['City'] ?? '');
-        $brewery->setCountry($data['Country'] ?? '');
-
-        return $brewery;
+        return $this->breweryDenormalizer->denormalize($data);
     }
 }

@@ -11,9 +11,11 @@ class BreweryDenormalizer implements BreweryDenormalizerInterface
     public function denormalize(array $data): Brewery
     {
         return new Brewery(
+            externalId: $data['brewery_id'],
             name: $data['Brewer'],
-            country: $data['Country'],
-            externalId: $data['brewery_id']
+            streetAddress: $data['Address'],
+            city: $data['City'],
+            country: $data['Country']
         );
     }
 }

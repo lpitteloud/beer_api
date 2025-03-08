@@ -22,17 +22,12 @@ readonly class BeerDataMapper implements BeerDataMapperInterface
         $beerId = $data['id'] ?? null;
         $beer = $this->beerProvider->findByExternalId($beerId);
 
-        if ($beer === null) {
-            $beer = $this->beerDenormalizer->denormalize($data);
+        if ($beer !== null) {
+            return $beer;
         }
 
-        $beer->setName($data['Name'] ?? '');
-        $beer->setAbv((float)($data['Alcohol By Volume'] ?? 0));
-        $beer->setIbu((int)($data['International Bitterness Units'] ?? 0));
-
-        if ($brewery !== null) {
-            $beer->setBrewery($brewery);
-        }
+        $beer = $this->beerDenormalizer->denormalize($data);
+        $beer->setBrewery($brewery);
 
         return $beer;
     }

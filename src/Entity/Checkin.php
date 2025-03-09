@@ -5,13 +5,29 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Dto\CheckinInput;
 use App\Repository\CheckinRepository;
+use App\State\CheckinInputProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\Timestampable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CheckinRepository::class)]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Get(),
+    new Post(
+        input: CheckinInput::class,
+        processor: CheckinInputProcessor::class
+    ),
+    new Delete(),
+    new Patch(),
+    new GetCollection()
+])]
 class Checkin
 {
     use Timestampable;

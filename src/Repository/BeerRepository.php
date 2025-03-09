@@ -21,7 +21,10 @@ class BeerRepository extends ServiceEntityRepository
     public function findHighestRatedBeers(int $limit): array
     {
         return $this->createQueryBuilder('beer')
-            ->orderBy('beer.rating', 'DESC')
+            ->select('beer', 'AVG(checkin.rating) as averageRating')
+            ->leftJoin('beer.checkins', 'checkin')
+            ->groupBy('beer.id')
+            ->orderBy('averageRating', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();

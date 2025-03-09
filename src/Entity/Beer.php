@@ -33,51 +33,51 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/rankings/beers/most-bitter',
             controller: BeerStatsController::class . '::getMostBitterBeers',
-        )
+        ),
     ],
-    normalizationContext: ['groups' => ['beer']],
+    normalizationContext: ['groups' => ['beer:read']],
 )]
 class Beer
 {
-    #[Groups('beer')]
+    #[Groups(['beer:read', 'rated_beer:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     public function __construct(
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         #[ORM\Column(length: 255)]
         private ?string $externalId = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         #[ORM\Column(length: 255)]
         private ?string $name = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[ORM\Column]
         private ?float $abv = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[ORM\Column]
         private ?int $ibu = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[Assert\Valid]
         #[ORM\ManyToOne(inversedBy: 'beers', cascade: ['persist'])]
         private ?Brewery $brewery = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[Assert\Valid]
         #[ORM\ManyToOne(inversedBy: 'beers', cascade: ['persist'])]
         #[ORM\JoinColumn(nullable: false)]
         private ?BeerStyle $style = null,
 
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read'])]
         #[Assert\Valid]
         #[ORM\ManyToOne(inversedBy: 'beers', cascade: ['persist'])]
         #[ORM\JoinColumn(nullable: false)]

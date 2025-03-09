@@ -24,6 +24,7 @@ class Checkin
     public function __construct(
         #[Assert\NotNull]
         #[Assert\Type('float')]
+        #[Assert\PositiveOrZero]
         #[ORM\Column]
         private ?float $rating = null,
 

@@ -17,4 +17,16 @@ class BeerStyleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, BeerStyle::class);
     }
+
+    public function findBeerStylesByBeerCount(int $limit): array
+    {
+        return $this->createQueryBuilder('beerStyle')
+            ->select('beerStyle', 'COUNT(beer.id) as beerCount')
+            ->leftJoin('beerStyle.beers', 'beer')
+            ->groupBy('beerStyle.id')
+            ->orderBy('beerCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

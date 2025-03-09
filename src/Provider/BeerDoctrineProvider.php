@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
+use App\ApiResource\RatedBeer;
 use App\Entity\Beer;
 use App\Repository\BeerRepository;
 
@@ -19,6 +20,24 @@ readonly class BeerDoctrineProvider implements BeerProviderInterface
     public function findByExternalId(string $externalId): ?Beer
     {
         return $this->beerRepository->findOneBy(['externalId' => $externalId]);
+    }
+
+    /**
+     * @return RatedBeer[]
+     */
+    public function findHighestRatedBeers(int $limit = self::DEFAULT_LIMIT): array
+    {
+        $results = $this->beerRepository->findHighestRatedBeers($limit);
+
+        $ratedBeers = [];
+
+        foreach ($results as $result) {
+            $beer = $result[0];
+            $avgRating = (float)$result['averageRating'] ?: 0.0;
+            $ratedBeers[] = new RatedBeer($beer, $avgRating);
+        }
+
+        return $ratedBeers;
     }
 
     /**

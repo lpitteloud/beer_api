@@ -14,13 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: BeerStyleRepository::class)]
 class BeerStyle
 {
+    #[Groups(['beer:read', 'rated_beer:read', 'ranked_style:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     public function __construct(
-        #[Groups('beer')]
+        #[Groups(['beer:read', 'rated_beer:read', 'ranked_style:read'])]
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         #[ORM\Column(length: 255)]

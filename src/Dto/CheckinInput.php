@@ -12,26 +12,14 @@ class CheckinInput
 {
     public function __construct(
         #[Assert\NotNull]
-        #[Groups(['checkin:write'])]
-        private ?Beer $beer = null,
-
-        #[Assert\NotNull]
         #[Assert\Range(min: 0, max: 5)]
         #[Groups(['checkin:write'])]
         private float $rating,
+
+        #[Assert\NotNull]
+        #[Groups(['checkin:write'])]
+        private ?Beer $beer = null,
     ) {
-    }
-
-    public function getBeer(): ?Beer
-    {
-        return $this->beer;
-    }
-
-    public function setBeer(?Beer $beer): static
-    {
-        $this->beer = $beer;
-
-        return $this;
     }
 
     public function getRating(): float
@@ -42,6 +30,18 @@ class CheckinInput
     public function setRating(float $rating): static
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getBeer(): ?Beer
+    {
+        return $this->beer;
+    }
+
+    public function setBeer(?Beer $beer): static
+    {
+        $this->beer = $beer;
 
         return $this;
     }

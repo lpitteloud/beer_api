@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BeerCategoryRepository::class)]
@@ -33,6 +34,7 @@ class BeerCategory
          * @var Collection<int, Beer>
          */
         #[ORM\OneToMany(targetEntity: Beer::class, mappedBy: 'category')]
+        #[Ignore]
         private Collection $beers = new ArrayCollection()
     ) {
     }

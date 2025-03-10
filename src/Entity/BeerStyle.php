@@ -8,12 +8,15 @@ use App\Repository\BeerStyleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BeerStyleRepository::class)]
 class BeerStyle
 {
+    use TimestampableEntity;
+
     #[Groups(['beer:read', 'rated_beer:read', 'ranked_style:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]

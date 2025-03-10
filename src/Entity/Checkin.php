@@ -14,7 +14,7 @@ use App\Dto\CheckinInput;
 use App\Repository\CheckinRepository;
 use App\State\CheckinInputProcessor;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\Timestampable;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CheckinRepository::class)]
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 class Checkin
 {
-    use Timestampable;
+    use TimestampableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
